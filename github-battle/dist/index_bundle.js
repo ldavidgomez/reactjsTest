@@ -26569,6 +26569,9 @@
 	var styles = {
 	    transparentBg: {
 	        background: 'transparent'
+	    },
+	    space: {
+	        marginTop: '25px'
 	    }
 	};
 
@@ -26707,7 +26710,7 @@
 	 */
 	var React = __webpack_require__(2);
 	var ConfirmBattle = __webpack_require__(240);
-	var githubHelpers = __webpack_require__(241);
+	var githubHelpers = __webpack_require__(243);
 
 	var ConfirmBattleContainer = React.createClass({
 	    displayName: 'ConfirmBattleContainer',
@@ -26732,9 +26735,18 @@
 	            });
 	        }.bind(this));
 	    },
+	    handleInitiateBattle: function () {
+	        this.context.router.push({
+	            pathname: '/results',
+	            state: {
+	                playersInfo: this.state.playersInfo
+	            }
+	        });
+	    },
 	    render: function () {
 	        return React.createElement(ConfirmBattle, {
 	            isLoading: this.state.isLoading,
+	            onInitiateBattle: this.handleInitiateBattle,
 	            playersInfo: this.state.playersInfo
 	        });
 	    }
@@ -26750,6 +26762,12 @@
 	 * Created by David on 15/08/2016.
 	 */
 	var React = __webpack_require__(2);
+	var PropTypes = React.PropTypes;
+	var styles = __webpack_require__(236);
+	var ReactRouter = __webpack_require__(177);
+	var Link = ReactRouter.Link;
+	var UserDetailsWrapper = __webpack_require__(241);
+	var UserDetails = __webpack_require__(242);
 
 	function puke(obj) {
 	    return React.createElement(
@@ -26757,21 +26775,69 @@
 	        null,
 	        JSON.stringify(obj, null, ' ')
 	    );
-	}
+	};
 
 	function ConfirmBattle(props) {
 	    return props.isLoading === true ? React.createElement(
 	        'p',
 	        null,
-	        ' LOADING! '
+	        'LOADING'
 	    ) : React.createElement(
 	        'div',
-	        null,
-	        ' CONFIRM BATTLE!: ',
-	        puke(props),
-	        ' '
+	        { className: 'jumbotron col-sm-12 text-center', style: styles.transparentBg },
+	        React.createElement(
+	            'h1',
+	            null,
+	            'Confirm Players'
+	        ),
+	        React.createElement(
+	            'div',
+	            { className: 'col-sm-8 col-sm-offset-2' },
+	            React.createElement(
+	                UserDetailsWrapper,
+	                { header: 'Player 1' },
+	                React.createElement(UserDetails, { info: props.playersInfo[0] })
+	            ),
+	            React.createElement(
+	                UserDetailsWrapper,
+	                { header: 'Player 2' },
+	                React.createElement(UserDetails, { info: props.playersInfo[1] })
+	            )
+	        ),
+	        React.createElement(
+	            'div',
+	            { className: 'col-sm-8 col-sm-offset-2' },
+	            React.createElement(
+	                'div',
+	                { className: 'col-sm-12', style: styles.space },
+	                React.createElement(
+	                    'button',
+	                    { type: 'button', className: 'btn btn-lg btn-success', onClick: props.onInitiateBattle },
+	                    'Initiate Battle!'
+	                )
+	            ),
+	            React.createElement(
+	                'div',
+	                { className: 'col-sm-12', style: styles.space },
+	                React.createElement(
+	                    Link,
+	                    { to: '/playerOne' },
+	                    React.createElement(
+	                        'button',
+	                        { type: 'button', className: 'btn btn-lg btn-danger' },
+	                        'Reselect Players'
+	                    )
+	                )
+	            )
+	        )
 	    );
 	}
+
+	ConfirmBattle.propTypes = {
+	    isLoading: PropTypes.bool.isRequired,
+	    onInitiateBattle: PropTypes.func.isRequired,
+	    playersInfo: PropTypes.array.isRequired
+	};
 
 	module.exports = ConfirmBattle;
 
@@ -26782,7 +26848,139 @@
 	/**
 	 * Created by David on 15/08/2016.
 	 */
-	var axios = __webpack_require__(242);
+	var React = __webpack_require__(2);
+	var PropTypes = React.PropTypes;
+
+	function UserDetailsWrapper(props) {
+	    return React.createElement(
+	        'div',
+	        { className: 'col-sm-6' },
+	        React.createElement(
+	            'p',
+	            { className: 'lead' },
+	            props.header
+	        ),
+	        props.children
+	    );
+	}
+
+	UserDetailsWrapper.propType = {
+	    header: PropTypes.string.isRequired
+	};
+
+	module.exports = UserDetailsWrapper;
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by David on 15/08/2016.
+	 */
+	var React = __webpack_require__(2);
+	var PropTypes = React.PropTypes;
+
+	function UserDetails(user) {
+	    return React.createElement(
+	        "div",
+	        null,
+	        !!user.score && React.createElement(
+	            "li",
+	            { className: "list-group-item" },
+	            React.createElement(
+	                "h3",
+	                null,
+	                "Score: ",
+	                user.score
+	            )
+	        ),
+	        React.createElement(
+	            "li",
+	            { className: "list-group-item" },
+	            " ",
+	            React.createElement("img", { src: user.info.avatar_url, className: "img-rounded img-responsive" })
+	        ),
+	        user.info.name && React.createElement(
+	            "li",
+	            { className: "list-group-item" },
+	            "Name: ",
+	            user.info.name
+	        ),
+	        React.createElement(
+	            "li",
+	            { className: "list-group-item" },
+	            "Username: ",
+	            user.info.login
+	        ),
+	        user.info.location && React.createElement(
+	            "li",
+	            { className: "list-group-item" },
+	            "Location: ",
+	            user.info.location
+	        ),
+	        user.info.company && React.createElement(
+	            "li",
+	            { className: "list-group-item" },
+	            "Company: ",
+	            user.info.company
+	        ),
+	        React.createElement(
+	            "li",
+	            { className: "list-group-item" },
+	            "Followers: ",
+	            user.info.followers
+	        ),
+	        React.createElement(
+	            "li",
+	            { className: "list-group-item" },
+	            "Following: ",
+	            user.info.following
+	        ),
+	        React.createElement(
+	            "li",
+	            { className: "list-group-item" },
+	            "Public Repos: ",
+	            user.info.public_repos
+	        ),
+	        user.info.blog && React.createElement(
+	            "li",
+	            { className: "list-group-item" },
+	            "Blog: ",
+	            React.createElement(
+	                "a",
+	                { href: user.info.blog },
+	                " ",
+	                user.info.blog
+	            )
+	        )
+	    );
+	}
+
+	UserDetails.propTypes = {
+	    score: PropTypes.number,
+	    info: PropTypes.shape({
+	        avatar_url: PropTypes.string.isRequired,
+	        blog: PropTypes.string,
+	        company: PropTypes.string,
+	        followers: PropTypes.number.isRequired,
+	        following: PropTypes.number.isRequired,
+	        location: PropTypes.string,
+	        login: PropTypes.string.isRequired,
+	        name: PropTypes.string,
+	        public_repos: PropTypes.number.isRequired
+	    })
+	};
+
+	module.exports = UserDetails;
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by David on 15/08/2016.
+	 */
+	var axios = __webpack_require__(244);
 
 	var id = "YOUR_CLIENT_ID";
 	var sec = "YOUR_SECRET_ID";
@@ -26809,20 +27007,20 @@
 	module.exports = helpers;
 
 /***/ },
-/* 242 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(243);
+	module.exports = __webpack_require__(245);
 
 /***/ },
-/* 243 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(244);
-	var bind = __webpack_require__(245);
-	var Axios = __webpack_require__(246);
+	var utils = __webpack_require__(246);
+	var bind = __webpack_require__(247);
+	var Axios = __webpack_require__(248);
 
 	/**
 	 * Create an instance of Axios
@@ -26858,16 +27056,16 @@
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(263);
+	axios.spread = __webpack_require__(265);
 
 
 /***/ },
-/* 244 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var bind = __webpack_require__(245);
+	var bind = __webpack_require__(247);
 
 	/*global toString:true*/
 
@@ -27167,7 +27365,7 @@
 
 
 /***/ },
-/* 245 */
+/* 247 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27184,17 +27382,17 @@
 
 
 /***/ },
-/* 246 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(247);
-	var utils = __webpack_require__(244);
-	var InterceptorManager = __webpack_require__(249);
-	var dispatchRequest = __webpack_require__(250);
-	var isAbsoluteURL = __webpack_require__(261);
-	var combineURLs = __webpack_require__(262);
+	var defaults = __webpack_require__(249);
+	var utils = __webpack_require__(246);
+	var InterceptorManager = __webpack_require__(251);
+	var dispatchRequest = __webpack_require__(252);
+	var isAbsoluteURL = __webpack_require__(263);
+	var combineURLs = __webpack_require__(264);
 
 	/**
 	 * Create a new instance of Axios
@@ -27275,13 +27473,13 @@
 
 
 /***/ },
-/* 247 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(244);
-	var normalizeHeaderName = __webpack_require__(248);
+	var utils = __webpack_require__(246);
+	var normalizeHeaderName = __webpack_require__(250);
 
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -27353,12 +27551,12 @@
 
 
 /***/ },
-/* 248 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(246);
 
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -27371,12 +27569,12 @@
 
 
 /***/ },
-/* 249 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(246);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -27429,13 +27627,13 @@
 
 
 /***/ },
-/* 250 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(244);
-	var transformData = __webpack_require__(251);
+	var utils = __webpack_require__(246);
+	var transformData = __webpack_require__(253);
 
 	/**
 	 * Dispatch a request to the server using whichever adapter
@@ -27476,10 +27674,10 @@
 	    adapter = config.adapter;
 	  } else if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(252);
+	    adapter = __webpack_require__(254);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(252);
+	    adapter = __webpack_require__(254);
 	  }
 
 	  return Promise.resolve(config)
@@ -27511,12 +27709,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 251 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(246);
 
 	/**
 	 * Transform the data for a request or a response
@@ -27537,18 +27735,18 @@
 
 
 /***/ },
-/* 252 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(244);
-	var settle = __webpack_require__(253);
-	var buildURL = __webpack_require__(256);
-	var parseHeaders = __webpack_require__(257);
-	var isURLSameOrigin = __webpack_require__(258);
-	var createError = __webpack_require__(254);
-	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(259);
+	var utils = __webpack_require__(246);
+	var settle = __webpack_require__(255);
+	var buildURL = __webpack_require__(258);
+	var parseHeaders = __webpack_require__(259);
+	var isURLSameOrigin = __webpack_require__(260);
+	var createError = __webpack_require__(256);
+	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(261);
 
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -27642,7 +27840,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(260);
+	      var cookies = __webpack_require__(262);
 
 	      // Add xsrf header
 	      var xsrfValue = config.withCredentials || isURLSameOrigin(config.url) ?
@@ -27704,12 +27902,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 253 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var createError = __webpack_require__(254);
+	var createError = __webpack_require__(256);
 
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -27735,12 +27933,12 @@
 
 
 /***/ },
-/* 254 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var enhanceError = __webpack_require__(255);
+	var enhanceError = __webpack_require__(257);
 
 	/**
 	 * Create an Error with the specified message, config, error code, and response.
@@ -27758,7 +27956,7 @@
 
 
 /***/ },
-/* 255 */
+/* 257 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27783,12 +27981,12 @@
 
 
 /***/ },
-/* 256 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(246);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -27857,12 +28055,12 @@
 
 
 /***/ },
-/* 257 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(246);
 
 	/**
 	 * Parse headers into an object
@@ -27900,12 +28098,12 @@
 
 
 /***/ },
-/* 258 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(246);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -27974,7 +28172,7 @@
 
 
 /***/ },
-/* 259 */
+/* 261 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28016,12 +28214,12 @@
 
 
 /***/ },
-/* 260 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(246);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -28075,7 +28273,7 @@
 
 
 /***/ },
-/* 261 */
+/* 263 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28095,7 +28293,7 @@
 
 
 /***/ },
-/* 262 */
+/* 264 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28113,7 +28311,7 @@
 
 
 /***/ },
-/* 263 */
+/* 265 */
 /***/ function(module, exports) {
 
 	'use strict';
