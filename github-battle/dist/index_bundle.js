@@ -26621,7 +26621,7 @@
 	        return React.createElement(Prompt, {
 	            onSubmitUser: this.handleSubmitUser,
 	            onUpdateUser: this.handleUpdateUser,
-	            header: [],
+	            header: this.props.route.header,
 	            username: this.state.username
 	        });
 	    }
@@ -26640,53 +26640,59 @@
 	var PropTypes = React.PropTypes;
 	var transparentBg = __webpack_require__(236).transparentBg;
 
-	var Prompt = React.createClass({
-	    displayName: 'Prompt',
-
-	    propTypes: {
-	        header: PropTypes.string.isRequired
-	    },
-	    render: function () {
-	        return React.createElement(
+	var Prompt = function (props) {
+	    return React.createElement(
+	        'div',
+	        { className: 'jumbotron col-sm-6 col-sm-offset-3 text center', style: transparentBg },
+	        React.createElement(
+	            'h1',
+	            null,
+	            props.header
+	        ),
+	        React.createElement(
 	            'div',
-	            { className: 'jumbotron col-sm-6 col-sm-offset-3 text center', style: transparentBg },
+	            { className: 'col-sm-12' },
 	            React.createElement(
-	                'h1',
-	                null,
-	                this.props.header
-	            ),
-	            React.createElement(
-	                'div',
-	                { className: 'col-sm-12' },
+	                'form',
+	                { onSubmit: props.onSubmitUser },
 	                React.createElement(
-	                    'form',
-	                    { onSubmit: this.props.onSubmitUser },
+	                    'div',
+	                    { className: 'form-group' },
+	                    React.createElement('input', {
+	                        className: 'form-control',
+	                        placeholder: 'Github Username',
+	                        onChange: props.onUpdateUser,
+	                        value: props.username,
+	                        type: 'text' })
+	                ),
+	                React.createElement(
+	                    'div',
+	                    { className: 'form-group col-sm-4 col-sm-offset-4' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'form-group' },
-	                        React.createElement('input', {
-	                            className: 'form-control',
-	                            placeholder: 'Github Username',
-	                            onChange: this.props.onUpdateUser,
-	                            value: this.props.username,
-	                            type: 'text' })
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        { className: 'form-group col-sm-4 col-sm-offset-4' },
-	                        React.createElement(
-	                            'button',
-	                            {
-	                                className: 'btn btn-block btn-success',
-	                                type: 'submit' },
-	                            'Continue'
-	                        )
+	                        'button',
+	                        {
+	                            className: 'btn btn-block btn-success',
+	                            type: 'submit' },
+	                        'Continue'
 	                    )
 	                )
 	            )
-	        );
-	    }
-	});
+	        )
+	    );
+	};
+
+	Prompt.propTypes = {
+	    header: PropTypes.string.isRequired,
+	    onUpdateUser: PropTypes.func.isRequired,
+	    onSubmitUser: PropTypes.func.isRequired,
+	    username: PropTypes.string.isRequired
+	};
+
+	// var Prompt = React.createClass({
+	//     render: function () {
+	//
+	//     }
+	// });
 
 	module.exports = Prompt;
 
