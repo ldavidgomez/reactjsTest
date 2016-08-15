@@ -21481,6 +21481,7 @@
 	var IndexRoute = ReactRouter.IndexRoute;
 	var Main = __webpack_require__(234);
 	var Home = __webpack_require__(235);
+	var PromptContainer = __webpack_require__(236);
 
 	var routes = React.createElement(
 	    Router,
@@ -21488,7 +21489,9 @@
 	    React.createElement(
 	        Route,
 	        { path: '/', component: Main },
-	        React.createElement(IndexRoute, { component: Home })
+	        React.createElement(IndexRoute, { component: Home }),
+	        React.createElement(Route, { path: 'playerOne', header: 'Player One', component: PromptContainer }),
+	        React.createElement(Route, { path: 'playerTwo/:playerOne', header: 'Player Two', component: PromptContainer })
 	    )
 	);
 
@@ -26532,6 +26535,61 @@
 	});
 
 	module.exports = Home;
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by David on 15/08/2016.
+	 */
+	var React = __webpack_require__(2);
+
+	var PromptContainer = React.createClass({
+	    displayName: "PromptContainer",
+
+	    render: function () {
+	        console.log(this);
+	        return React.createElement(
+	            "div",
+	            { className: "jumbotron col-sm-6 col-sm-offset-3 text center" },
+	            React.createElement(
+	                "h1",
+	                null,
+	                this.props.route.header
+	            ),
+	            React.createElement(
+	                "div",
+	                { className: "col-sm-12" },
+	                React.createElement(
+	                    "form",
+	                    null,
+	                    React.createElement(
+	                        "div",
+	                        { className: "form-group" },
+	                        React.createElement("input", {
+	                            className: "form-control",
+	                            placeholder: "Github Username",
+	                            type: "text" })
+	                    ),
+	                    React.createElement(
+	                        "div",
+	                        { className: "form-group col-sm-4 col-sm-offset-4" },
+	                        React.createElement(
+	                            "button",
+	                            {
+	                                className: "btn btn-block btn-success",
+	                                type: "submit" },
+	                            "Continue"
+	                        )
+	                    )
+	                )
+	            )
+	        );
+	    }
+	});
+
+	module.exports = PromptContainer;
 
 /***/ }
 /******/ ]);
