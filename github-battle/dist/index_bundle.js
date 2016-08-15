@@ -21481,7 +21481,7 @@
 	var IndexRoute = ReactRouter.IndexRoute;
 	var Main = __webpack_require__(234);
 	var Home = __webpack_require__(235);
-	var PromptContainer = __webpack_require__(236);
+	var PromptContainer = __webpack_require__(237);
 
 	var routes = React.createElement(
 	    Router,
@@ -26521,6 +26521,9 @@
 	 * Created by David on 15/08/2016.
 	 */
 	var React = __webpack_require__(2);
+	var transparentBg = __webpack_require__(236).transparentBg;
+	var ReactRouter = __webpack_require__(177);
+	var Link = ReactRouter.Link;
 
 	var Home = React.createClass({
 	    displayName: 'Home',
@@ -26528,8 +26531,26 @@
 	    render: function () {
 	        return React.createElement(
 	            'div',
-	            null,
-	            'Hello from Home!'
+	            { className: 'jumbotron col-sm-12 text-center', style: transparentBg },
+	            React.createElement(
+	                'h1',
+	                null,
+	                'Github Battle'
+	            ),
+	            React.createElement(
+	                'p',
+	                { className: 'lead' },
+	                'Some fancy motto'
+	            ),
+	            React.createElement(
+	                Link,
+	                { to: '/playerOne' },
+	                React.createElement(
+	                    'button',
+	                    { type: 'button', className: 'btn btn-lg btn-success' },
+	                    'Get Started'
+	                )
+	            )
 	        );
 	    }
 	});
@@ -26538,49 +26559,127 @@
 
 /***/ },
 /* 236 */
+/***/ function(module, exports) {
+
+	/**
+	 * Created by David on 15/08/2016.
+	 */
+	var styles = {
+	    transparentBg: {
+	        background: 'transparent'
+	    }
+	};
+
+	module.exports = styles;
+
+/***/ },
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Created by David on 15/08/2016.
 	 */
 	var React = __webpack_require__(2);
+	var Prompt = __webpack_require__(238);
 
 	var PromptContainer = React.createClass({
-	    displayName: "PromptContainer",
+	    displayName: 'PromptContainer',
 
+	    contextTypes: {
+	        router: React.PropTypes.object.isRequired
+	    },
+	    getInitialState: function () {
+	        return {
+	            username: ''
+	        };
+	    },
+	    handleUpdateUser: function (e) {
+	        this.setState({
+	            username: e.target.value
+	        });
+	    },
+	    handleSubmitUser: function (e) {
+	        e.preventDefault();
+	        var username = this.state.username;
+	        this.setState({
+	            username: ''
+	        });
+
+	        if (this.props.routeParams.playerOne) {
+	            this.context.router.push({
+	                pathname: '/battle',
+	                query: {
+	                    playerOne: this.props.routeParams.playerOne,
+	                    playerTwo: this.state.username
+	                }
+	            });
+	        } else {
+	            this.context.router.push('/playerTwo/' + this.state.username);
+	        }
+	    },
 	    render: function () {
-	        console.log(this);
+	        return React.createElement(Prompt, {
+	            onSubmitUser: this.handleSubmitUser,
+	            onUpdateUser: this.handleUpdateUser,
+	            header: [],
+	            username: this.state.username
+	        });
+	    }
+	});
+
+	module.exports = PromptContainer;
+
+/***/ },
+/* 238 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by David on 15/08/2016.
+	 */
+	var React = __webpack_require__(2);
+	var PropTypes = React.PropTypes;
+	var transparentBg = __webpack_require__(236).transparentBg;
+
+	var Prompt = React.createClass({
+	    displayName: 'Prompt',
+
+	    propTypes: {
+	        header: PropTypes.string.isRequired
+	    },
+	    render: function () {
 	        return React.createElement(
-	            "div",
-	            { className: "jumbotron col-sm-6 col-sm-offset-3 text center" },
+	            'div',
+	            { className: 'jumbotron col-sm-6 col-sm-offset-3 text center', style: transparentBg },
 	            React.createElement(
-	                "h1",
+	                'h1',
 	                null,
-	                this.props.route.header
+	                this.props.header
 	            ),
 	            React.createElement(
-	                "div",
-	                { className: "col-sm-12" },
+	                'div',
+	                { className: 'col-sm-12' },
 	                React.createElement(
-	                    "form",
-	                    null,
+	                    'form',
+	                    { onSubmit: this.props.onSubmitUser },
 	                    React.createElement(
-	                        "div",
-	                        { className: "form-group" },
-	                        React.createElement("input", {
-	                            className: "form-control",
-	                            placeholder: "Github Username",
-	                            type: "text" })
+	                        'div',
+	                        { className: 'form-group' },
+	                        React.createElement('input', {
+	                            className: 'form-control',
+	                            placeholder: 'Github Username',
+	                            onChange: this.props.onUpdateUser,
+	                            value: this.props.username,
+	                            type: 'text' })
 	                    ),
 	                    React.createElement(
-	                        "div",
-	                        { className: "form-group col-sm-4 col-sm-offset-4" },
+	                        'div',
+	                        { className: 'form-group col-sm-4 col-sm-offset-4' },
 	                        React.createElement(
-	                            "button",
+	                            'button',
 	                            {
-	                                className: "btn btn-block btn-success",
-	                                type: "submit" },
-	                            "Continue"
+	                                className: 'btn btn-block btn-success',
+	                                type: 'submit' },
+	                            'Continue'
 	                        )
 	                    )
 	                )
@@ -26589,7 +26688,7 @@
 	    }
 	});
 
-	module.exports = PromptContainer;
+	module.exports = Prompt;
 
 /***/ }
 /******/ ]);
