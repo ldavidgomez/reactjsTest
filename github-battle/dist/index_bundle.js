@@ -21482,6 +21482,7 @@
 	var Main = __webpack_require__(234);
 	var Home = __webpack_require__(235);
 	var PromptContainer = __webpack_require__(237);
+	var ConfirmBattleContainer = __webpack_require__(239);
 
 	var routes = React.createElement(
 	    Router,
@@ -21491,7 +21492,8 @@
 	        { path: '/', component: Main },
 	        React.createElement(IndexRoute, { component: Home }),
 	        React.createElement(Route, { path: 'playerOne', header: 'Player One', component: PromptContainer }),
-	        React.createElement(Route, { path: 'playerTwo/:playerOne', header: 'Player Two', component: PromptContainer })
+	        React.createElement(Route, { path: 'playerTwo/:playerOne', header: 'Player Two', component: PromptContainer }),
+	        React.createElement(Route, { path: 'battle', components: ConfirmBattleContainer })
 	    )
 	);
 
@@ -26695,6 +26697,76 @@
 	// });
 
 	module.exports = Prompt;
+
+/***/ },
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by David on 15/08/2016.
+	 */
+	var React = __webpack_require__(2);
+	var ConfirmBattle = __webpack_require__(240);
+
+	var ConfirmBattleContainer = React.createClass({
+	    displayName: 'ConfirmBattleContainer',
+
+	    contextTypes: {
+	        router: React.PropTypes.object.isRequired
+	    },
+	    getInitialState() {
+	        console.log('getInitialState');
+	        return {
+	            isLoading: true,
+	            playerInfo: []
+	        };
+	    },
+	    componentWillMount: function () {
+	        console.log('componentWillMount');
+	    },
+	    componentDidMount: function () {
+	        console.log('componentDidMount');
+	        var query = this.props.location.query;
+	        // Fetch info from github then update state
+	    },
+	    componentWillReceiveProps: function () {
+	        console.log('componentWillReceiveProps');
+	    },
+	    componentWillUnmount: function () {
+	        console.log('componentWillUnmount');
+	    },
+	    render: function () {
+	        return React.createElement(ConfirmBattle, {
+	            isLoading: this.state.isLoading,
+	            playersInfo: this.state.playerInfo
+	        });
+	    }
+	});
+
+	module.exports = ConfirmBattleContainer;
+
+/***/ },
+/* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by David on 15/08/2016.
+	 */
+	var React = __webpack_require__(2);
+
+	function ConfirmBattle(props) {
+	    return props.isLoading === true ? React.createElement(
+	        'p',
+	        null,
+	        ' LOADING! '
+	    ) : React.createElement(
+	        'p',
+	        null,
+	        ' CONFIRM BATTLE! '
+	    );
+	}
+
+	module.exports = ConfirmBattle;
 
 /***/ }
 /******/ ]);
