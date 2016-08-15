@@ -21483,6 +21483,7 @@
 	var Home = __webpack_require__(235);
 	var PromptContainer = __webpack_require__(237);
 	var ConfirmBattleContainer = __webpack_require__(239);
+	var ResultsContainer = __webpack_require__(266);
 
 	var routes = React.createElement(
 	    Router,
@@ -21493,7 +21494,8 @@
 	        React.createElement(IndexRoute, { component: Home }),
 	        React.createElement(Route, { path: 'playerOne', header: 'Player One', component: PromptContainer }),
 	        React.createElement(Route, { path: 'playerTwo/:playerOne', header: 'Player Two', component: PromptContainer }),
-	        React.createElement(Route, { path: 'battle', components: ConfirmBattleContainer })
+	        React.createElement(Route, { path: 'battle', component: ConfirmBattleContainer }),
+	        React.createElement(Route, { path: 'results', component: ResultsContainer })
 	    )
 	);
 
@@ -26990,6 +26992,29 @@
 	    return axios.get('https://api.github.com/users/' + username + param);
 	}
 
+	function getRepos(username) {
+	    return axios.get('https://api.github.com/users/' + username + '/repos' + param + '&per_page=100');
+	}
+
+	function getTotalStars(repos) {
+	    return repos.data.reduce(function (prev, current) {
+	        return prev + current.stargazers_count;
+	    }, 0);
+	}
+
+	function getPlayersData(player) {
+	    return getRepos(player.login).then(getTotalStars).then(function (totalStars) {
+	        return {
+	            followers: player.followers,
+	            totalStars: totalStars
+	        };
+	    });
+	}
+
+	function calculateScores(players) {
+	    return [players[0].followers * 3 + players[0].totalStars, players[1].followers * 3 + players[1].totalStars];
+	}
+
 	var helpers = {
 	    getPlayersInfo: function (players) {
 	        return axios.all(players.map(function (username) {
@@ -27000,6 +27025,13 @@
 	            });
 	        }).catch(function (err) {
 	            console.warn('Error in getPlayerInfo' + err);
+	        });
+	    },
+	    battle: function (players) {
+	        var playerOneData = getPlayersData(players[0]);
+	        var playerTwoData = getPlayersData(players[1]);
+	        return axios.all([playerOneData, playerTwoData]).then(calculateScores).catch(function (err) {
+	            console.warn('Error in getPlayersInfo: ', err);
 	        });
 	    }
 	};
@@ -28342,6 +28374,88 @@
 	  };
 	};
 
+
+/***/ },
+/* 266 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by David on 15/08/2016.
+	 */
+	var React = __webpack_require__(2);
+	var Results = __webpack_require__(267);
+	var githubHelpers = __webpack_require__(243);
+
+	var ResultsContainer = React.createClass({
+	    displayName: 'ResultsContainer',
+
+	    getInitialState: function () {
+	        return {
+	            isLoading: true,
+	            scores: []
+	        };
+	    },
+	    componentDidMount: function () {
+	        githubHelpers.battle(this.props.location.state.playersInfo).then(function (scores) {
+	            this.setState({
+	                scores: scores,
+	                isLoading: false
+	            });
+	        }.bind(this));
+	    },
+	    render: function () {
+	        return React.createElement(Results, {
+	            isLoading: this.state.isLoading,
+	            playersInfo: this.props.location.state.playersInfo,
+	            scores: this.state.scores });
+	    }
+	});
+
+	module.exports = ResultsContainer;
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by David on 15/08/2016.
+	 */
+	var React = __webpack_require__(2);
+	var PropTypes = React.PropTypes;
+
+	function puke(obj) {
+	    return React.createElement(
+	        'pre',
+	        null,
+	        JSON.stringify(obj, null, ' ')
+	    );
+	}
+
+	function Results(props) {
+	    return React.createElement(
+	        'div',
+	        null,
+	        puke(props)
+	    );
+	}
+
+	// var Results = React.createClass({
+	//     render: function (props) {
+	//         return (
+	//             <div>
+	//                 Results: {puke(props)}
+	//             </div>
+	//         )
+	//     }
+	// });
+
+	Results.propTypes = {
+	    isLoading: PropTypes.bool.isRequired,
+	    playersInfo: PropTypes.array.isRequired,
+	    scores: PropTypes.array.isRequired
+	};
+
+	module.exports = Results;
 
 /***/ }
 /******/ ]);
