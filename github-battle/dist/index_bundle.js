@@ -26896,75 +26896,76 @@
 	var PropTypes = React.PropTypes;
 
 	function UserDetails(user) {
+	    console.log(user.info.name + ' ' + user.score + ' ' + !!user.score);
 	    return React.createElement(
-	        "div",
+	        'div',
 	        null,
-	        !!user.score && React.createElement(
-	            "li",
-	            { className: "list-group-item" },
+	        !isNaN(user.score) && React.createElement(
+	            'li',
+	            { className: 'list-group-item' },
 	            React.createElement(
-	                "h3",
+	                'h3',
 	                null,
-	                "Score: ",
+	                'Score: ',
 	                user.score
 	            )
 	        ),
 	        React.createElement(
-	            "li",
-	            { className: "list-group-item" },
-	            " ",
-	            React.createElement("img", { src: user.info.avatar_url, className: "img-rounded img-responsive" })
+	            'li',
+	            { className: 'list-group-item' },
+	            ' ',
+	            React.createElement('img', { src: user.info.avatar_url, className: 'img-rounded img-responsive' })
 	        ),
 	        user.info.name && React.createElement(
-	            "li",
-	            { className: "list-group-item" },
-	            "Name: ",
+	            'li',
+	            { className: 'list-group-item' },
+	            'Name: ',
 	            user.info.name
 	        ),
 	        React.createElement(
-	            "li",
-	            { className: "list-group-item" },
-	            "Username: ",
+	            'li',
+	            { className: 'list-group-item' },
+	            'Username: ',
 	            user.info.login
 	        ),
 	        user.info.location && React.createElement(
-	            "li",
-	            { className: "list-group-item" },
-	            "Location: ",
+	            'li',
+	            { className: 'list-group-item' },
+	            'Location: ',
 	            user.info.location
 	        ),
 	        user.info.company && React.createElement(
-	            "li",
-	            { className: "list-group-item" },
-	            "Company: ",
+	            'li',
+	            { className: 'list-group-item' },
+	            'Company: ',
 	            user.info.company
 	        ),
 	        React.createElement(
-	            "li",
-	            { className: "list-group-item" },
-	            "Followers: ",
+	            'li',
+	            { className: 'list-group-item' },
+	            'Followers: ',
 	            user.info.followers
 	        ),
 	        React.createElement(
-	            "li",
-	            { className: "list-group-item" },
-	            "Following: ",
+	            'li',
+	            { className: 'list-group-item' },
+	            'Following: ',
 	            user.info.following
 	        ),
 	        React.createElement(
-	            "li",
-	            { className: "list-group-item" },
-	            "Public Repos: ",
+	            'li',
+	            { className: 'list-group-item' },
+	            'Public Repos: ',
 	            user.info.public_repos
 	        ),
 	        user.info.blog && React.createElement(
-	            "li",
-	            { className: "list-group-item" },
-	            "Blog: ",
+	            'li',
+	            { className: 'list-group-item' },
+	            'Blog: ',
 	            React.createElement(
-	                "a",
+	                'a',
 	                { href: user.info.blog },
-	                " ",
+	                ' ',
 	                user.info.blog
 	            )
 	        )

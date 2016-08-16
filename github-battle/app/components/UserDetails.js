@@ -5,9 +5,10 @@ var React = require('react');
 var PropTypes = React.PropTypes
 
 function UserDetails (user) {
+    console.log(user.info.name + ' ' + user.score + ' ' + !!user.score);
     return (
         <div>
-            {!!user.score && <li className="list-group-item"><h3>Score: {user.score}</h3></li>}
+            {!isNaN(user.score) && <li className="list-group-item"><h3>Score: {user.score}</h3></li>}
             <li className="list-group-item"> <img src={user.info.avatar_url} className="img-rounded img-responsive"/></li>
             {user.info.name && <li className="list-group-item">Name: {user.info.name}</li>}
             <li className="list-group-item">Username: {user.info.login}</li>
