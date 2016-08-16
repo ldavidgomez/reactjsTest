@@ -9,7 +9,7 @@ var ResultsContainer = React.createClass({
     getInitialState: function () {
         return {
             isLoading: true,
-            scores: []
+            scores: [0]
         }
     },
     componentDidMount: function () {
