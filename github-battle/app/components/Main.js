@@ -20,4 +20,20 @@ var Main = React.createClass({
     }
 });
 
+// Another syntax for defining components
+// const Main = props => {
+//     //const postPreviews = renderPostPreviews(props.posts);
+//
+//     return (
+//         <div className="main-container">
+//             <ReactCSSTransitionGroup
+//                 transitionName="appear"
+//                 transitionAppearTimeout={500}
+//                 transitionLeaveTimeout={500}>
+//                 {React.cloneElement(props.children, {key: props.location.pathname})}
+//             </ReactCSSTransitionGroup>
+//         </div>
+//     );
+// };
+
 module.exports = Main;

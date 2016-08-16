@@ -26505,24 +26505,37 @@
 	var ReactCSSTransitionGroup = __webpack_require__(235);
 	__webpack_require__(242);
 
-	var Main = React.createClass({
-	    displayName: 'Main',
+	// var Main = React.createClass({
+	//     render: function () {
+	//         return (
+	//             <div className="main-container">
+	//                 <ReactCSSTransitionGroup
+	//                     transitionName="appear"
+	//                     transitionAppearTimeout={500}
+	//                     transitionLeaveTimeout={500}>
+	//                     {React.cloneElement(this.props.children, {key: this.props.location.pathname})}
+	//                 </ReactCSSTransitionGroup>
+	//             </div>
+	//         )
+	//     }
+	// });
 
-	    render: function () {
-	        return React.createElement(
-	            'div',
-	            { className: 'main-container' },
-	            React.createElement(
-	                ReactCSSTransitionGroup,
-	                {
-	                    transitionName: 'appear',
-	                    transitionAppearTimeout: 500,
-	                    transitionLeaveTimeout: 500 },
-	                React.cloneElement(this.props.children, { key: this.props.location.pathname })
-	            )
-	        );
-	    }
-	});
+	const Main = props => {
+	    //const postPreviews = renderPostPreviews(props.posts);
+
+	    return React.createElement(
+	        'div',
+	        { className: 'main-container' },
+	        React.createElement(
+	            ReactCSSTransitionGroup,
+	            {
+	                transitionName: 'appear',
+	                transitionAppearTimeout: 500,
+	                transitionLeaveTimeout: 500 },
+	            React.cloneElement(props.children, { key: props.location.pathname })
+	        )
+	    );
+	};
 
 	module.exports = Main;
 
