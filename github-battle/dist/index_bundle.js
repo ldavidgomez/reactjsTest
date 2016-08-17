@@ -26505,37 +26505,40 @@
 	var ReactCSSTransitionGroup = __webpack_require__(235);
 	__webpack_require__(242);
 
-	// var Main = React.createClass({
-	//     render: function () {
-	//         return (
-	//             <div className="main-container">
-	//                 <ReactCSSTransitionGroup
-	//                     transitionName="appear"
-	//                     transitionAppearTimeout={500}
-	//                     transitionLeaveTimeout={500}>
-	//                     {React.cloneElement(this.props.children, {key: this.props.location.pathname})}
-	//                 </ReactCSSTransitionGroup>
-	//             </div>
-	//         )
-	//     }
-	// });
+	var Main = React.createClass({
+	    displayName: 'Main',
 
-	const Main = props => {
-	    //const postPreviews = renderPostPreviews(props.posts);
+	    render: function () {
+	        return React.createElement(
+	            'div',
+	            { className: 'main-container' },
+	            React.createElement(
+	                ReactCSSTransitionGroup,
+	                {
+	                    transitionName: 'appear',
+	                    transitionAppearTimeout: 500,
+	                    transitionLeaveTimeout: 500 },
+	                React.cloneElement(this.props.children, { key: this.props.location.pathname })
+	            )
+	        );
+	    }
+	});
 
-	    return React.createElement(
-	        'div',
-	        { className: 'main-container' },
-	        React.createElement(
-	            ReactCSSTransitionGroup,
-	            {
-	                transitionName: 'appear',
-	                transitionAppearTimeout: 500,
-	                transitionLeaveTimeout: 500 },
-	            React.cloneElement(props.children, { key: props.location.pathname })
-	        )
-	    );
-	};
+	// Another syntax for defining components
+	// const Main = props => {
+	//     //const postPreviews = renderPostPreviews(props.posts);
+	//
+	//     return (
+	//         <div className="main-container">
+	//             <ReactCSSTransitionGroup
+	//                 transitionName="appear"
+	//                 transitionAppearTimeout={500}
+	//                 transitionLeaveTimeout={500}>
+	//                 {React.cloneElement(props.children, {key: props.location.pathname})}
+	//             </ReactCSSTransitionGroup>
+	//         </div>
+	//     );
+	// };
 
 	module.exports = Main;
 
